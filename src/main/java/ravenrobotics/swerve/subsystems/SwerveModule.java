@@ -107,7 +107,7 @@ public class SwerveModule
 
     public void stopMotors()
     {
-        driveMotor.set(ControlMode.PercentOutput, 0);
-        turnMotor.set(ControlMode.PercentOutput, 0);
+        driveMotor.set(ControlMode.Current, 0);
+        turnMotor.set(ControlMode.Current, 0);
     }
 }
