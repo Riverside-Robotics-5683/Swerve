@@ -4,8 +4,15 @@
 
 package ravenrobotics.swerve;
 
-public class RobotContainer {
-  
-  public RobotContainer() {
-  }
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import ravenrobotics.swerve.Constants.DSConstants;
+import ravenrobotics.swerve.subsystems.DriveSubsystem;
+
+public class RobotContainer
+{
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+
+  private final CommandXboxController driveController = new CommandXboxController(DSConstants.DRIVER_PORT);
 }

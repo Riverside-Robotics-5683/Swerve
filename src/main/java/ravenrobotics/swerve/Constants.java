@@ -38,9 +38,9 @@ public class Constants
     {
         public static final double kGearRatio = 6.75;
 
-        public static final double kP = 0;
+        public static final double kP = 31.233;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 1.1108;
 
         public static final double kPhysialMaxSpeedMPS = 16.5;
 
