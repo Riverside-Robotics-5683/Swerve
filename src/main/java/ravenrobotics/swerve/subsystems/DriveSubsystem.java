@@ -24,8 +24,8 @@ public class DriveSubsystem extends SubsystemBase
     private final SwerveModule backLeft = new SwerveModule(MotorConstants.kBackLeftDrive, MotorConstants.kBackLeftTurn, CanCoderConstants.kBackLeftCanCoder, true, false, false);
     private final SwerveModule backRight = new SwerveModule(MotorConstants.kBackRightDrive, MotorConstants.kBackRightTurn, CanCoderConstants.kBackRightCanCoder, true, false, false);
 
-    private final AHRS navx = new AHRS(SPI.Port.kMXP);
-    private final Pigeon2 pigeon2 = new Pigeon2(Constants.kPigeon2);
+    //private final AHRS navx = new AHRS(SPI.Port.kMXP);
+    private final Pigeon2 pigeon2 = new Pigeon2(12, "rio");
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(SwerveConstants.kDrivetrainKinematics, Rotation2d.fromDegrees(0), getModulePositions());
     private final Field2d field = new Field2d();

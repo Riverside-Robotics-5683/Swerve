@@ -54,11 +54,11 @@ public class SwerveModule
         }
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(CTREConversions.talonFXToDegrees(getTurnMotorPosition())));
 
-        double turnVoltage = turningController.calculate(getTurnMotorPosition(), state.angle.getRadians()) * 5;
-        double driveVoltage = state.speedMetersPerSecond / SwerveConstants.kPhysialMaxSpeedMPS * 5;
+        double turnVoltage = turningController.calculate(getTurnMotorPosition(), state.angle.getRadians()) * 3;
+        double driveVoltage = state.speedMetersPerSecond / SwerveConstants.kPhysialMaxSpeedMPS * 3;
 
-        driveVoltage = MathUtil.clamp(driveVoltage, -5, 5);
-        turnVoltage = MathUtil.clamp(turnVoltage, -5, 5);
+        driveVoltage = MathUtil.clamp(driveVoltage, -3,3);
+        turnVoltage = MathUtil.clamp(turnVoltage, -3, 3);
 
         driveMotor.setVoltage(driveVoltage);
         turnMotor.setVoltage(turnVoltage);
