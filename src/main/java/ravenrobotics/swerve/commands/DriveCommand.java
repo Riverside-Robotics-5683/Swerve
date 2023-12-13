@@ -34,6 +34,12 @@ public class DriveCommand extends CommandBase
     }
 
     @Override
+    public void initialize()
+    {
+        
+    }
+
+    @Override
     public void execute()
     {
         double x = xInput.getAsDouble();

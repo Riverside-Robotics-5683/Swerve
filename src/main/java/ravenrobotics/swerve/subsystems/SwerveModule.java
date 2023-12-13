@@ -1,8 +1,7 @@
 package ravenrobotics.swerve.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -18,7 +17,7 @@ public class SwerveModule
     private final TalonFX driveMotor;
     private final TalonFX turnMotor;
 
-    private final CANCoder absoluteEncoder;
+    private final CANcoder absoluteEncoder;
     private final boolean isAbsEncoderReversed;
 
     private final PIDController turningController;
@@ -33,7 +32,7 @@ public class SwerveModule
         this.isDriveReversed = isDriveReversed;
         this.isTurnReversed = isTurnReversed;
         
-        this.absoluteEncoder = new CANCoder(absoluteID);
+        this.absoluteEncoder = new CANcoder(absoluteID);
         this.isAbsEncoderReversed = isAbsEncoderReversed;
 
         this.turningController = new PIDController(Constants.SwerveConstants.kP, Constants.SwerveConstants.kI, Constants.SwerveConstants.kD);
@@ -55,34 +54,34 @@ public class SwerveModule
         }
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(CTREConversions.talonFXToDegrees(getTurnMotorPosition())));
 
-        double turnVoltage = turningController.calculate(getTurnMotorPosition(), state.angle.getRadians()) * 12;
-        double driveVoltage = state.speedMetersPerSecond / SwerveConstants.kPhysialMaxSpeedMPS * 12;
+        double turnVoltage = turningController.calculate(getTurnMotorPosition(), state.angle.getRadians()) * 5;
+        double driveVoltage = state.speedMetersPerSecond / SwerveConstants.kPhysialMaxSpeedMPS * 5;
 
-        driveVoltage = MathUtil.clamp(driveVoltage, -12, 12);
-        turnVoltage = MathUtil.clamp(turnVoltage, -12, 12);
+        driveVoltage = MathUtil.clamp(driveVoltage, -5, 5);
+        turnVoltage = MathUtil.clamp(turnVoltage, -5, 5);
 
-        driveMotor.set(ControlMode.Current, driveVoltage);
-        turnMotor.set(ControlMode.Current, turnVoltage);
+        driveMotor.setVoltage(driveVoltage);
+        turnMotor.setVoltage(turnVoltage);
     }
 
     public double getDriveMotorPosition()
     {
-        return driveMotor.getSelectedSensorPosition();
+        return driveMotor.getPosition().getValue();
     }
 
     public double getTurnMotorPosition()
     {
-        return turnMotor.getSelectedSensorPosition();
+        return turnMotor.getPosition().getValue();
     }
 
     public double getDriveMotorVelocity()
     {
-        return driveMotor.getSelectedSensorVelocity();
+        return driveMotor.getVelocity().getValue();
     }
 
     public double getTurnMotorVelocity()
     {
-        return turnMotor.getSelectedSensorVelocity();
+        return turnMotor.getVelocity().getValue();
     }
 
     public SwerveModuleState getState()
@@ -97,17 +96,22 @@ public class SwerveModule
 
     public double getCanCoderPosition()
     {
-        return absoluteEncoder.getPosition();
+        return absoluteEncoder.getPosition().getValue();
+    }
+
+    public void setPIDController(double p, double i, double d)
+    {
+        turningController.setPID(p, i, d);
     }
 
     public void resetTurnMotorPosition()
     {
-        turnMotor.setSelectedSensorPosition(CTREConversions.canCodertoTalonFX(getCanCoderPosition()));
+        turnMotor.setRotorPosition(CTREConversions.canCodertoTalonFX(getCanCoderPosition()));
     }
 
     public void stopMotors()
     {
-        driveMotor.set(ControlMode.Current, 0);
-        turnMotor.set(ControlMode.Current, 0);
+        driveMotor.stopMotor();
+        turnMotor.stopMotor();
     }
 }

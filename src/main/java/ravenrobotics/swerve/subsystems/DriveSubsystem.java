@@ -1,6 +1,6 @@
 package ravenrobotics.swerve.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,13 +19,13 @@ import ravenrobotics.swerve.Constants.SwerveConstants;
 
 public class DriveSubsystem extends SubsystemBase
 {
-    private final SwerveModule frontLeft = new SwerveModule(MotorConstants.kFrontLeftDrive, MotorConstants.kFrontLeftTurn, CanCoderConstants.kFrontLeftCanCoder, false, false, false);
-    private final SwerveModule frontRight = new SwerveModule(MotorConstants.kFrontRightDrive, MotorConstants.kFrontRightTurn, CanCoderConstants.kFrontRightCanCoder, false, false, false);
-    private final SwerveModule backLeft = new SwerveModule(MotorConstants.kBackLeftDrive, MotorConstants.kBackLeftTurn, CanCoderConstants.kBackLeftCanCoder, false, false, false);
-    private final SwerveModule backRight = new SwerveModule(MotorConstants.kBackRightDrive, MotorConstants.kBackRightTurn, CanCoderConstants.kBackRightCanCoder, false, false, false);
+    private final SwerveModule frontLeft = new SwerveModule(MotorConstants.kFrontLeftDrive, MotorConstants.kFrontLeftTurn, CanCoderConstants.kFrontLeftCanCoder, true, false, false);
+    private final SwerveModule frontRight = new SwerveModule(MotorConstants.kFrontRightDrive, MotorConstants.kFrontRightTurn, CanCoderConstants.kFrontRightCanCoder, true, false, false);
+    private final SwerveModule backLeft = new SwerveModule(MotorConstants.kBackLeftDrive, MotorConstants.kBackLeftTurn, CanCoderConstants.kBackLeftCanCoder, true, false, false);
+    private final SwerveModule backRight = new SwerveModule(MotorConstants.kBackRightDrive, MotorConstants.kBackRightTurn, CanCoderConstants.kBackRightCanCoder, true, false, false);
 
     private final AHRS navx = new AHRS(SPI.Port.kMXP);
-    //private final Pigeon2 pigeon2 = new Pigeon2(Constants.kPigeon2);
+    private final Pigeon2 pigeon2 = new Pigeon2(Constants.kPigeon2);
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(SwerveConstants.kDrivetrainKinematics, Rotation2d.fromDegrees(0), getModulePositions());
     private final Field2d field = new Field2d();
@@ -37,8 +37,8 @@ public class DriveSubsystem extends SubsystemBase
             try
             {
                 resetTurnMotorEncoders();
-                navx.calibrate();
-                //pigeon2.zeroGyroBiasNow();
+                //navx.calibrate();
+                pigeon2.setYaw(0);
             }
             catch (Exception e)
             {
@@ -67,12 +67,12 @@ public class DriveSubsystem extends SubsystemBase
 
     public Rotation2d getYaw()
     {
-        return Rotation2d.fromDegrees(navx.getYaw());
+        return Rotation2d.fromDegrees(pigeon2.getYaw().getValue());
     }
 
     public void zeroYaw()
     {
-        navx.zeroYaw();
+        pigeon2.setYaw(0);
     }
 
     public void resetTurnMotorEncoders()
@@ -89,11 +89,23 @@ public class DriveSubsystem extends SubsystemBase
         return modulePositions;
     }
 
+    public void updatePIDs(double p, double i, double d)
+    {
+        frontLeft.setPIDController(p, i, d);
+        frontRight.setPIDController(p, i, d);
+        backLeft.setPIDController(p, i, d);
+        backRight.setPIDController(p, i, d);
+    }
+
     @Override
     public void periodic()
     {
         odometry.update(getYaw(), getModulePositions());
         field.setRobotPose(odometry.getPoseMeters());
-        SmartDashboard.putNumber("Navx Yaw", navx.getYaw());
+        SmartDashboard.putNumber("Pigeon2 Yaw", pigeon2.getYaw().getValue());
+
+        SmartDashboard.putNumber("P", 4);
+        SmartDashboard.putNumber("I", 0);
+        SmartDashboard.putNumber("D", 0);
     }
 }

@@ -4,9 +4,13 @@
 
 package ravenrobotics.swerve;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import ravenrobotics.swerve.Constants.DSConstants;
 import ravenrobotics.swerve.commands.DriveCommand;
+import ravenrobotics.swerve.commands.UpdatePIDCommand;
+import ravenrobotics.swerve.commands.ZeroHeadingCommand;
 import ravenrobotics.swerve.subsystems.DriveSubsystem;
 
 public class RobotContainer
@@ -17,6 +21,14 @@ public class RobotContainer
 
   public RobotContainer()
   {
-    driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driveController::getLeftX, driveController::getLeftY, driveController::getRightX, () -> true));
+    driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, () -> -driveController.getLeftY(), driveController::getLeftX, driveController::getRightX, () -> true));
+    SmartDashboard.putData(new UpdatePIDCommand(driveSubsystem));
+
+    configureBindings();
+  }
+
+  private void configureBindings()
+  {
+    new Trigger(driveController.leftBumper()).onTrue(new ZeroHeadingCommand(driveSubsystem));
   }
 }
