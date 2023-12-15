@@ -6,12 +6,12 @@ public class CTREConversions
 {
     public static double degreesToTalonFX(double angle)
     {
-        return angle / (360.0 / (Constants.SwerveConstants.kGearRatio * 2048.0));
+        return angle / (360.0 / (Constants.SwerveConstants.kDriveGearRatio * 2048.0));
     }
 
     public static double talonFXToDegrees(double encoderCount)
     {
-        return encoderCount * (360.0 /  (Constants.SwerveConstants.kGearRatio * 2048.0));
+        return encoderCount * (360.0 /  (Constants.SwerveConstants.kDriveGearRatio * 2048.0));
     }
     
     public static double canCodertoTalonFX(double encoderCount)

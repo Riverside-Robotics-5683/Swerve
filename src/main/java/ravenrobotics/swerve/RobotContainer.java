@@ -5,11 +5,13 @@
 package ravenrobotics.swerve;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import ravenrobotics.swerve.Constants.DSConstants;
 import ravenrobotics.swerve.commands.DriveCommand;
 import ravenrobotics.swerve.commands.UpdatePIDCommand;
+import ravenrobotics.swerve.commands.ZeroCanCodersCommand;
 import ravenrobotics.swerve.commands.ZeroHeadingCommand;
 import ravenrobotics.swerve.subsystems.DriveSubsystem;
 
@@ -29,6 +31,12 @@ public class RobotContainer
 
   private void configureBindings()
   {
-    new Trigger(driveController.leftBumper()).onTrue(new ZeroHeadingCommand(driveSubsystem));
+    driveController.leftBumper().onTrue(new ZeroHeadingCommand(driveSubsystem));
+    //driveController.rightBumper().onTrue(new ZeroCanCodersCommand(driveSubsystem));
+  }
+
+  public Command getZeroEncoders()
+  {
+    return new ZeroCanCodersCommand(driveSubsystem);
   }
 }

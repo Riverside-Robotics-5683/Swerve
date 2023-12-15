@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import ravenrobotics.swerve.commands.ZeroCanCodersCommand;
+import ravenrobotics.swerve.subsystems.DriveSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -37,11 +39,16 @@ public class Robot extends TimedRobot {
   public void disabledExit() {}
 
   @Override
-  public void autonomousInit() {
+  public void autonomousInit() 
+  {
+    m_robotContainer.getZeroEncoders().schedule();
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() 
+  {
+    
+  }
 
   @Override
   public void autonomousExit() {}

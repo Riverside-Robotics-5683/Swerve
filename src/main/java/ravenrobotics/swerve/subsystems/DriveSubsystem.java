@@ -19,10 +19,10 @@ import ravenrobotics.swerve.Constants.SwerveConstants;
 
 public class DriveSubsystem extends SubsystemBase
 {
-    private final SwerveModule frontLeft = new SwerveModule(MotorConstants.kFrontLeftDrive, MotorConstants.kFrontLeftTurn, CanCoderConstants.kFrontLeftCanCoder, true, false, false);
-    private final SwerveModule frontRight = new SwerveModule(MotorConstants.kFrontRightDrive, MotorConstants.kFrontRightTurn, CanCoderConstants.kFrontRightCanCoder, true, false, false);
-    private final SwerveModule backLeft = new SwerveModule(MotorConstants.kBackLeftDrive, MotorConstants.kBackLeftTurn, CanCoderConstants.kBackLeftCanCoder, true, false, false);
-    private final SwerveModule backRight = new SwerveModule(MotorConstants.kBackRightDrive, MotorConstants.kBackRightTurn, CanCoderConstants.kBackRightCanCoder, true, false, false);
+    private final SwerveModule frontLeft = new SwerveModule(MotorConstants.kFrontLeftDrive, MotorConstants.kFrontLeftTurn, CanCoderConstants.kFrontLeftCanCoder, false, false, SwerveConstants.frontLeftStart);
+    private final SwerveModule frontRight = new SwerveModule(MotorConstants.kFrontRightDrive, MotorConstants.kFrontRightTurn, CanCoderConstants.kFrontRightCanCoder, false, false, SwerveConstants.frontRightStart);
+    private final SwerveModule backLeft = new SwerveModule(MotorConstants.kBackLeftDrive, MotorConstants.kBackLeftTurn, CanCoderConstants.kBackLeftCanCoder, false, false, SwerveConstants.backLeftStart);
+    private final SwerveModule backRight = new SwerveModule(MotorConstants.kBackRightDrive, MotorConstants.kBackRightTurn, CanCoderConstants.kBackRightCanCoder, false, false, SwerveConstants.backRightStart);
 
     //private final AHRS navx = new AHRS(SPI.Port.kMXP);
     private final Pigeon2 pigeon2 = new Pigeon2(12, "rio");
@@ -97,6 +97,14 @@ public class DriveSubsystem extends SubsystemBase
         backRight.setPIDController(p, i, d);
     }
 
+    public void zeroCancoders()
+    {
+        frontLeft.resetCanCoder();
+        frontRight.resetCanCoder();
+        backLeft.resetCanCoder();
+        backRight.resetCanCoder();
+    }
+
     @Override
     public void periodic()
     {
@@ -107,5 +115,15 @@ public class DriveSubsystem extends SubsystemBase
         SmartDashboard.putNumber("P", 4);
         SmartDashboard.putNumber("I", 0);
         SmartDashboard.putNumber("D", 0);
+
+        SmartDashboard.putNumber("FL CANcoder", frontLeft.getCanCoderPosition());
+        SmartDashboard.putNumber("FR CANcoder", frontRight.getCanCoderPosition());
+        SmartDashboard.putNumber("BL CANcoder", backLeft.getCanCoderPosition());
+        SmartDashboard.putNumber("BR CANcoder", backRight.getCanCoderPosition());
+
+        SmartDashboard.putNumber("FL Turn Value", frontLeft.getTurnMotorPosition());
+        SmartDashboard.putNumber("FR Turn Value", frontRight.getTurnMotorPosition());
+        SmartDashboard.putNumber("BL Turn Value", backLeft.getTurnMotorPosition());
+        SmartDashboard.putNumber("BR Turn Value", backRight.getTurnMotorPosition());
     }
 }

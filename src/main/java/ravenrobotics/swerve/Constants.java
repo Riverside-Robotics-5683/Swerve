@@ -24,25 +24,33 @@ public class Constants
 
         public static final int kBackRightDrive = 4;
         public static final int kBackRightTurn = 1;
+
+        public static final double kMaxVoltage = 12;
     }
 
     public static class CanCoderConstants
     {
-        public static final int kFrontLeftCanCoder = 9;
-        public static final int kFrontRightCanCoder = 8;
-        public static final int kBackLeftCanCoder = 10;
-        public static final int kBackRightCanCoder = 11;
+        public static final int kFrontLeftCanCoder = 11;
+        public static final int kFrontRightCanCoder = 10;
+        public static final int kBackLeftCanCoder = 8;
+        public static final int kBackRightCanCoder = 9;
     }
 
     public static class SwerveConstants
     {
-        public static final double kGearRatio = 6.75;
+        public static final double kDriveGearRatio = 6.75;
+        public static final double kAngleGearRatio = 12.8;
 
-        public static final double kP = 0.5;
+        public static final double kP = 4;
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kPhysialMaxSpeedMPS = 1;
+        public static final double frontLeftStart = -0.09912109375;
+        public static final double frontRightStart = -0.787109375;
+        public static final double backLeftStart = 0.002197265625;
+        public static final double backRightStart = -0.000244140625;
+
+        public static final double kPhysialMaxSpeedMPS = 5;
 
         public static final double kTrackWidth = DistanceConversions.inchesToMeters(29.3449);
         public static final double kWheelBase = DistanceConversions.inchesToMeters(20.75);
