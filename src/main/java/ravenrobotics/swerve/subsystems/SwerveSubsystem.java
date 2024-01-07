@@ -2,6 +2,7 @@ package ravenrobotics.swerve.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -24,8 +25,9 @@ public class SwerveSubsystem extends SubsystemBase
     //Pigeon2 IMU
     private final Pigeon2 pigeon2 = new Pigeon2(Constants.kPigeon2, SwerveModuleConfigs.kDriveCANbus);
     //Odometry and field stuff
-    private final SwerveDriveOdometry swerveOdometry = new SwerveDriveOdometry(SwerveDriveKinematic.kDrivetrainKinematics, Rotation2d.fromDegrees(0), getModulePositions());
-    private final Field2d field = new Field2d();
+    private SwerveDriveOdometry swerveOdometry = new SwerveDriveOdometry(SwerveDriveKinematic.kDrivetrainKinematics, Rotation2d.fromDegrees(0), getModulePositions());
+    private Field2d field = new Field2d();
+    private Pose2d robotPose = new Pose2d();
 
     public SwerveSubsystem()
     {
@@ -99,5 +101,9 @@ public class SwerveSubsystem extends SubsystemBase
         SmartDashboard.putNumber("BR Encoder", backRightModule.getAbsoluteEncoderRotations());
 
         SmartDashboard.putNumber("Pigeon2 Yaw", getYaw());
+
+        //Update odometry
+        robotPose = swerveOdometry.update(Rotation2d.fromDegrees(getYaw()), getModulePositions());
+        field.setRobotPose(robotPose);
     }
 }
